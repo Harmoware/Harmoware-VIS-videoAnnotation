@@ -19,7 +19,7 @@ export const VideoInput = (props)=>{
         <ol className="video_input">
             <li className="flex_row">
                 <input type="url" ref={inputRef} style={{'width':'100%'}}
-                onChange={onChange}/>
+                onChange={onChange} value="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"/>
             </li>
             <li className="flex_row">
                 <button onClick={onClick} style={{'width':'100%'}}

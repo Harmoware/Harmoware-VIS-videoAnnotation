@@ -48,14 +48,14 @@ export default class Controller extends React.Component {
             <li className="flex_column">
               <VideoInput updateState={updateState}/>
             </li>
-            <li className="flex_row">
+            {/*<li className="flex_row">
                 <div className="harmovis_input_button_column" title='3D object data selection'>
                 <label htmlFor="ObjectInput">
                 3D object data selection<ObjectInput actions={actions} id="ObjectInput" updateState={updateState}/>
                 </label>
                 <div>{objFileName}</div>
                 </div>
-            </li>
+            </li>*/}
             <li className="flex_row">
                 <div className="harmovis_input_button_column" title='3D object data selection'>
                 <label htmlFor="AnnotationInput">
@@ -64,7 +64,7 @@ export default class Controller extends React.Component {
                 <div>{annotationFileName}</div>
                 </div>
             </li>
-            <li className="flex_column">
+            {/*<li className="flex_column">
               <ol><li className="flex_row">
               <InputNumber caption="longitude:" value={position[0]} step="0.0001" min="-180" max="180"
               onChange={this.updatePos.bind(this,0)}/>
@@ -88,7 +88,7 @@ export default class Controller extends React.Component {
             <li className="flex_row">
               <button onClick={this.setViewport.bind(this)} disabled={objFileData?false:true}
               className="harmovis_button" title='Move to object position'>Move to object position</button>
-            </li>
+            </li>*/}
             {/*<li className="flex_row">
                 <div className="harmovis_input_button_column" title='PointCloud data selection'>
                 <label htmlFor="MovesInput">
@@ -97,7 +97,7 @@ export default class Controller extends React.Component {
                 <div>{movesFileName}</div>
                 </div>
             </li>*/}
-            <li className="flex_row">
+            {/*<li className="flex_row">
               {animatePause ?
                 <PlayButton actions={actions} />:<PauseButton actions={actions} />
               }&nbsp;
@@ -117,15 +117,14 @@ export default class Controller extends React.Component {
               <NavigationButton buttonType="zoom-in" actions={actions} viewport={viewport} />&nbsp;
               <NavigationButton buttonType="zoom-out" actions={actions} viewport={viewport} />&nbsp;
               <NavigationButton buttonType="compass" actions={actions} viewport={viewport} />
-            </li>
+            </li>*/}
             <li className="flex_column">
-              <label htmlFor="ElapsedTimeRange">elapsedTime
-                <input type="number" value={currentTime} className='harmovis_input_number'
+              <label htmlFor="ElapsedTimeRange">elapsedTime</label>
+                <input type="number" value={currentTime|0} className='harmovis_input_number'
                   min={0} max={duration} onChange={this.setTime.bind(this)} />
-              sec</label>
             </li>
             <li className="flex_column">
-              <input type="range" value={currentTime} min={0} max={duration} step={1}
+              <input type="range" value={currentTime} min={0} max={duration} step={1} style={{'width':'100%'}}
                 onChange={this.setTime.bind(this)} className='harmovis_input_range' />
             </li>
 

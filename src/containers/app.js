@@ -142,7 +142,7 @@ class App extends Container {
           videoUrl={this.state.videoUrl}
           AnnotationPropsArray={[{data:PathData}]}/>
 
-          <div className="harmovis_area">
+          {/*<div className="harmovis_area">
           <HarmoVisLayers
             mapStyle={null}
             viewport={viewport} actions={actions} visible={false}
@@ -172,18 +172,18 @@ class App extends Container {
                 PointCloudData.length > 0 ? this.getPointCloudLayer(PointCloudData):null,
             ]}
           />
-        </div>
+        </div>*/}
         <div className="harmovis_footer">
-          longitude:{viewport.longitude}&nbsp;
+          {/*longitude:{viewport.longitude}&nbsp;
           latitude:{viewport.latitude}&nbsp;
           zoom:{viewport.zoom}&nbsp;
           bearing:{viewport.bearing}&nbsp;
-          pitch:{viewport.pitch}&nbsp;
+          pitch:{viewport.pitch}&nbsp;*/}
           currentTime:{currentTime ? currentTime : 0}&nbsp;
           duration:{duration ? duration : 0}&nbsp;
           paused:{paused !== undefined ? paused ? 'true' : 'false' : 'undefined'}
         </div>
-        <svg width={viewport.width} height={viewport.height} className="harmovis_overlay">
+        {/*<svg width={viewport.width} height={viewport.height} className="harmovis_overlay">
           <g fill="white" fontSize="12">
             {this.state.popup[2].length > 0 ?
               this.state.popup[2].split('\n').map((value, index) =>
@@ -193,7 +193,7 @@ class App extends Container {
                 >{value}</text>) : null
             }
           </g>
-        </svg>
+        </svg>*/}
         <FpsDisplay />
       </div>
     );
