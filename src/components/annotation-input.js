@@ -5,7 +5,6 @@ export const AnnotationInput = (props)=>{
 
     const onSelect = (e)=>{
         const reader = new FileReader();
-        console.log(e.target.files)
         const file = e.target.files[0];
         if (!file) {
             return;

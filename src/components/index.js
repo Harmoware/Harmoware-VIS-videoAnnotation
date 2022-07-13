@@ -119,7 +119,7 @@ export default class Controller extends React.Component {
               <NavigationButton buttonType="compass" actions={actions} viewport={viewport} />
             </li>*/}
             <li className="flex_column">
-              <label htmlFor="ElapsedTimeRange">elapsedTime</label>
+              <label htmlFor="ElapsedTimeRange">currentTime</label>
                 <input type="number" value={currentTime|0} className='harmovis_input_number'
                   min={0} max={duration} onChange={this.setTime.bind(this)} />
             </li>
