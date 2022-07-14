@@ -7,11 +7,11 @@ export const VideoInput = (props)=>{
     const { updateState } = props;
 
     const onClick = ()=>{
-        const checkStr = inputRef.current.value
-        const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
+        const videoUrl = inputRef.current.value
+        const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(videoUrl)
         setUrlCheck(result)
         if(result){
-            updateState({ videoUrl:inputRef.current.value });
+            updateState({ videoUrl });
         }
     };
 

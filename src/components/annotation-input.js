@@ -25,6 +25,8 @@ export const AnnotationInput = (props)=>{
             actions.setInputFilename({ annotationFileName: file_name });
             actions.setMovesBase(readdata);
             actions.setAnimatePause(true);
+            actions.setTimeBegin(0)
+            actions.setTime(0)
             actions.setLoading(false);
         };
     };

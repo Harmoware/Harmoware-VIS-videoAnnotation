@@ -72,7 +72,6 @@ const AnnotationLayer = (props)=>{
         if(canvasRef.current !== undefined){
             const context = canvasRef.current.getContext('2d')
             setcontext(context)
-            updateCanvas(context,props.data,props.width,props.height)
         }
     },[canvasRef])
 
@@ -80,7 +79,7 @@ const AnnotationLayer = (props)=>{
         if(context !== undefined){
             updateCanvas(context,props.data,props.width,props.height)
         }
-    },[context,props])
+    },[context,props.data,props.width,props.height])
 
     return (
         <canvas className={props.className}
