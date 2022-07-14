@@ -41,6 +41,7 @@ class App extends Container {
         this.props.actions.setTime(this.videoRef.current.player.currentTime)
       })
       this.videoRef.current.player.on("playing",()=>{
+        this.props.actions.setTimeBegin(0)
         this.props.actions.setTimeLength(this.videoRef.current.player.duration)
       })
     }
