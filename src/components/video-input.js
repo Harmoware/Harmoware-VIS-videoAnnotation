@@ -3,23 +3,32 @@ import React from 'react';
 export const VideoInput = (props)=>{
     const inputRef = React.useRef(undefined)
     const [urlCheck,setUrlCheck] = React.useState(false)
+    const [value,setValue] = React.useState("https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4")
     const { updateState } = props;
 
     const onClick = ()=>{
-        updateState({ videoUrl:inputRef.current.value });
+        const checkStr = inputRef.current.value
+        const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
+        setUrlCheck(result)
+        if(result){
+            updateState({ videoUrl:inputRef.current.value });
+        }
     };
 
     const onChange = (e)=>{
         const checkStr = e.target.value
         const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
         setUrlCheck(result)
+        if(result){
+            setValue(checkStr)
+        }
     };
 
     return (
         <ol className="video_input">
             <li className="flex_row">
                 <input type="url" ref={inputRef} style={{'width':'100%'}}
-                onChange={onChange} value="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-720p.mp4"/>
+                onChange={onChange} value={value} disabled={urlCheck}/>
             </li>
             <li className="flex_row">
                 <button onClick={onClick} style={{'width':'100%'}}
