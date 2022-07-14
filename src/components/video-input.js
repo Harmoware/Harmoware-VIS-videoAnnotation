@@ -19,9 +19,7 @@ export const VideoInput = (props)=>{
         const checkStr = e.target.value
         const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
         setUrlCheck(result)
-        if(result){
-            setValue(checkStr)
-        }
+        setValue(checkStr)
     };
 
     return (
