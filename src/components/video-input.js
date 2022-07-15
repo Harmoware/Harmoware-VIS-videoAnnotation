@@ -26,7 +26,7 @@ export const VideoInput = (props)=>{
         <ol className="video_input">
             <li className="flex_row">
                 <input type="url" ref={inputRef} style={{'width':'100%'}}
-                onChange={onChange} value={value} disabled={urlCheck}/>
+                onChange={onChange} value={value}/>
             </li>
             <li className="flex_row">
                 <button onClick={onClick} style={{'width':'100%'}}

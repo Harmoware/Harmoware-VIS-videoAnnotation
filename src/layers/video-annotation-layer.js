@@ -23,6 +23,7 @@ class VideoAnnotationLayer extends React.Component{
         }
         if(prevProps.videoUrl !== this.props.videoUrl){
             if(this.player !== undefined){
+                this.player.source = this.props.videoUrl
                 this.player.restart()
             }
         }
@@ -36,8 +37,9 @@ class VideoAnnotationLayer extends React.Component{
                 <>
                 <video ref={this.videoRef} className={this.props.className}
                     id={this.props.id} muted={this.props.muted} loop={this.props.loop}
-                    autoPlay={this.props.autoPlay} controls={this.props.controls}>
-                    <source src={this.props.videoUrl} />
+                    autoPlay={this.props.autoPlay} controls={this.props.controls}
+                    src={this.props.videoUrl}>
+                    {/*<source src={this.props.videoUrl} />*/}
                 </video>
                 {this.props.AnnotationPropsArray.map((AnnotationProps,idx)=>
                     <AnnotationLayer key={idx} width={videoWidth} height={videoHeight}

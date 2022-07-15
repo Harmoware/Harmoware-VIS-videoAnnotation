@@ -128,7 +128,7 @@ class App extends Container {
   render() {
     const { actions, viewport, movedData, movesbase } = this.props;
     const PointCloudData = movedData.filter(x=>x.pointCloud);
-    const PathData = movedData;
+    const PathData = movedData.filter(x=>x.path||x.polygon);
     const { position } = this.state;
     const {paused=false,currentTime=0,duration=0} = this.videoRef.current ? this.videoRef.current.player :{}
 
