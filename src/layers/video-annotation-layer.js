@@ -39,7 +39,6 @@ class VideoAnnotationLayer extends React.Component{
                     id={this.props.id} muted={this.props.muted} loop={this.props.loop}
                     autoPlay={this.props.autoPlay} controls={this.props.controls}
                     src={this.props.videoUrl}>
-                    {/*<source src={this.props.videoUrl} />*/}
                 </video>
                 {this.props.AnnotationPropsArray.map((AnnotationProps,idx)=>
                     <AnnotationLayer key={idx} width={videoWidth} height={videoHeight}
