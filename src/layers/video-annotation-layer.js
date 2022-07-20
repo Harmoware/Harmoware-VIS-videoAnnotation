@@ -96,11 +96,11 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
     for(let i=0; i<annotationDataArray.length; i=i+1){
         const annotationData = annotationDataArray[i]
         if(annotationData.path){
-            const {coordinate,colorstr} = annotationData.path
+            const {coordinate,strokeStyle,lineWidth} = annotationData.path
             if(coordinate && Array.isArray(coordinate)){
                 context.beginPath()
                 for(let j=0; j<coordinate.length; j=j+1){
-                    if(coordinate[j].length >=2 ){
+                    if(coordinate[j].length >= 2){
                         if(j===0){
                             context.moveTo(coordinate[j][0],coordinate[j][1])
                         }else{
@@ -108,16 +108,21 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                         }
                     }
                 }
-                if(colorstr){
-                    context.strokeStyle = colorstr
-                }else{
-                    context.strokeStyle = 'black'
+                if(coordinate.length > 1){
+                    const lastIdx = coordinate.length-1
+                    if(coordinate[0].length >= 2 && coordinate[lastIdx].length >= 2){
+                        if(coordinate[0][0] === coordinate[lastIdx][0] && coordinate[0][1] === coordinate[lastIdx][1]){
+                            context.closePath()
+                        }
+                    }
                 }
+                context.strokeStyle = strokeStyle || 'black'
+                context.lineWidth = lineWidth || 1
                 context.stroke()
             }
         }else
         if(annotationData.polygon){
-            const {coordinate,colorstr,strokecolorstr} = annotationData.polygon
+            const {coordinate,fillStyle,strokeStyle,lineWidth} = annotationData.polygon
             if(coordinate && Array.isArray(coordinate)){
                 context.beginPath()
                 for(let j=0; j<coordinate.length; j=j+1){
@@ -130,17 +135,32 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                     }
                 }
                 context.closePath()
-                if(colorstr){
-                    context.fillStyle = colorstr
-                }else{
-                    context.fillStyle = 'black'
-                }
+                context.fillStyle = fillStyle || 'black'
                 context.fill()
-                if(strokecolorstr){
-                    context.strokeStyle = strokecolorstr
+                context.lineWidth = lineWidth || 1
+                context.strokeStyle = strokeStyle || 'black'
+                if(lineWidth || strokeStyle){
                     context.stroke()
-                }else{
-                    context.strokeStyle = 'black'
+                }
+            }
+        }else
+        if(annotationData.text){
+            const {fillText,strokeText,fillStyle,strokeStyle,font} = annotationData.text
+            if(fillText || strokeText){
+                context.font = font || '10px sans-serif'
+                if(fillText){
+                    const {text,x,y} = fillText
+                    if(text && x && y){
+                        context.fillStyle = fillStyle || 'black'
+                        context.fillText(text,x,y)
+                    }
+                }
+                if(strokeText){
+                    const {text,x,y} = strokeText
+                    if(text && x && y){
+                        context.strokeStyle = strokeStyle || 'black'
+                        context.strokeText(text,x,y)
+                    }
                 }
             }
         }
