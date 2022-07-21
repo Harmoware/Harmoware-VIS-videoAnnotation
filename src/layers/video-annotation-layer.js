@@ -96,7 +96,7 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
     for(let i=0; i<annotationDataArray.length; i=i+1){
         const annotationData = annotationDataArray[i]
         if(annotationData.path){
-            const {coordinate,strokeStyle,lineWidth} = annotationData.path
+            const {coordinate,strokeStyle,lineWidth,globalAlpha} = annotationData.path
             if(coordinate && Array.isArray(coordinate)){
                 context.beginPath()
                 for(let j=0; j<coordinate.length; j=j+1){
@@ -118,11 +118,12 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                 }
                 context.strokeStyle = strokeStyle || 'black'
                 context.lineWidth = lineWidth || 1
+                context.globalAlpha = globalAlpha || 1
                 context.stroke()
             }
         }else
         if(annotationData.polygon){
-            const {coordinate,fillStyle,strokeStyle,lineWidth} = annotationData.polygon
+            const {coordinate,fillStyle,strokeStyle,lineWidth,globalAlpha} = annotationData.polygon
             if(coordinate && Array.isArray(coordinate)){
                 context.beginPath()
                 for(let j=0; j<coordinate.length; j=j+1){
@@ -136,6 +137,7 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                 }
                 context.closePath()
                 context.fillStyle = fillStyle || 'black'
+                context.globalAlpha = globalAlpha || 1
                 context.fill()
                 context.lineWidth = lineWidth || 1
                 context.strokeStyle = strokeStyle || 'black'
@@ -145,9 +147,10 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
             }
         }else
         if(annotationData.text){
-            const {fillText,strokeText,fillStyle,strokeStyle,font} = annotationData.text
+            const {fillText,strokeText,fillStyle,strokeStyle,font,globalAlpha} = annotationData.text
             if(fillText || strokeText){
                 context.font = font || '10px sans-serif'
+                context.globalAlpha = globalAlpha || 1
                 if(fillText){
                     const {text,x,y} = fillText
                     if(text && x && y){
