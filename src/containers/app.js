@@ -23,6 +23,7 @@ class App extends Container {
       videoUrl: undefined
     };
     this.videoRef = React.createRef()
+    this.currentTime = 0
   }
 
   componentDidMount(){
@@ -37,13 +38,23 @@ class App extends Container {
     actions.setDefaultViewport({defaultZoom:20.6,defaultPitch:30});
     actions.setViewport({longitude:position[0],latitude:position[1],maxZoom:25,maxPitch:180,pitch:0});
     if(this.videoRef.current && this.videoRef.current.player){
-      this.videoRef.current.player.on("timeupdate",()=>{
+      /*this.videoRef.current.player.on("timeupdate",()=>{
         this.props.actions.setTime(this.videoRef.current.player.currentTime)
-      })
+      })*/
       this.videoRef.current.player.on("playing",()=>{
         this.props.actions.setTimeBegin(0)
         this.props.actions.setTimeLength(this.videoRef.current.player.duration)
       })
+      this.videoRef.current.player.on("error",(error)=>{
+        console.log({error})
+      })
+    }
+  }
+
+  componentDidUpdate(){
+    if(Math.abs(this.currentTime - this.videoRef.current.player.currentTime) > 0.01){
+      this.currentTime = this.videoRef.current.player.currentTime
+      this.props.actions.setTime(this.currentTime)
     }
   }
 

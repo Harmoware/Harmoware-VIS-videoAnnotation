@@ -8,7 +8,7 @@ export const VideoInput = (props)=>{
 
     const onClick = ()=>{
         const videoUrl = inputRef.current.value
-        const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(videoUrl)
+        const result = true ///^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(videoUrl)
         setUrlCheck(result)
         if(result){
             updateState({ videoUrl });
@@ -17,7 +17,7 @@ export const VideoInput = (props)=>{
 
     const onChange = (e)=>{
         const checkStr = e.target.value
-        const result = /^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
+        const result = true ///^https?:\/\/[\w!?/+\-_~;.,*&@#$%()'[\]]+/.test(checkStr)
         setUrlCheck(result)
         setValue(checkStr)
     };

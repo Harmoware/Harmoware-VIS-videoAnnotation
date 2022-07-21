@@ -39,6 +39,7 @@ class VideoAnnotationLayer extends React.Component{
                     id={this.props.id} muted={this.props.muted} loop={this.props.loop}
                     autoPlay={this.props.autoPlay} controls={this.props.controls}
                     src={this.props.videoUrl}>
+                    非対応の動画データ
                 </video>
                 {this.props.AnnotationPropsArray.map((AnnotationProps,idx)=>
                     <AnnotationLayer key={idx} width={videoWidth} height={videoHeight}
@@ -50,6 +51,7 @@ class VideoAnnotationLayer extends React.Component{
             return (
                 <video ref={this.videoRef} className={this.props.className}
                     id={this.props.id} muted={this.props.muted} >
+                    非対応の動画データ
                 </video>
             )
         }
