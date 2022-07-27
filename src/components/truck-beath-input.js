@@ -46,7 +46,7 @@ export const TruckBeathInput = (props)=>{
                 return {
                     frame:frame,
                     elapsedtime:(frame/30),
-                    realtime:(frame*8.1),
+                    realtime:(frame*8.1665),
                     beathData:beathData,
                     beathUseRete:(beathUseCount/(data.length-1))
                 }

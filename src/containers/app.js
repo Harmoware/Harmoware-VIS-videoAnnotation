@@ -81,6 +81,10 @@ class App extends Container {
     context.fillText(`truck_beath_rate`,30,rateStart_y)
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
     if(framecount>0){
+      for(let j=0; j<truckBeathData.length; j=j+100){
+        context.strokeRect(start_x+(j*framePerPx),rateStart_y-15,1,15)
+        context.fillText(`${j}`,start_x+(j*framePerPx)+2,rateStart_y-15)
+      }
       context.strokeStyle = 'yellow'
       context.beginPath()
       for(let j=0; j<truckBeathData.length; j=j+1){
