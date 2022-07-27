@@ -20,7 +20,9 @@ class App extends Container {
       getOrientation:[0,0,90],
       opacity: 0.1,
       currentTime: 0,
-      videoUrl: undefined
+      videoUrl: undefined,
+      truckBeathData: null,
+      beathDataArray: null,
     };
     this.videoRef = React.createRef()
     this.currentTime = 0
@@ -52,7 +54,7 @@ class App extends Container {
   }
 
   componentDidUpdate(){
-    if(Math.abs(this.currentTime - this.videoRef.current.player.currentTime) > 0.01){
+    if(Math.abs(this.currentTime - this.videoRef.current.player.currentTime) >= (1/60)){
       this.currentTime = this.videoRef.current.player.currentTime
       this.props.actions.setTime(this.currentTime)
     }
@@ -62,30 +64,60 @@ class App extends Container {
     this.setState(updateData);
   }
 
-  updateCanvas(context){
-    if(this.videoRef.current && this.videoRef.current.player){
-      const {videoWidth,videoHeight,currentTime} = this.videoRef.current.player
-      context.clearRect(0,0,videoWidth,videoHeight)
+  updateCanvas(context,width,height,truckBeathData){
+    const clientHeight = 250
+    context.clearRect(0,0,width,height)
+    context.strokeStyle = '#CCCCCC'
+    context.fillStyle = '#CCCCCC'
+    context.textAlign="left";
+    context.textBaseline="top";
+    context.font = '12px sans-serif'
+    context.lineWidth = 0.5
+    const start_x = 150
+    const framecount = truckBeathData!==null ? truckBeathData.length : 0
+    const graphwidth = width-start_x
+    const framePerPx = framecount>0 ? graphwidth/framecount:0
+    const rateStart_y = clientHeight+20
+    context.fillText(`truck_beath_rate`,30,rateStart_y)
+    context.strokeRect(start_x,rateStart_y,graphwidth,100)
+    if(framecount>0){
+      context.strokeStyle = 'yellow'
       context.beginPath()
-      context.strokeStyle = 'white'
-      context.fillStyle = 'blue'
-      context.rect(50,50,videoWidth/2,videoHeight/2)
-      context.globalAlpha=0.5
-      context.fill()
-      context.globalAlpha=1
-      context.lineWidth=10
+      for(let j=0; j<truckBeathData.length; j=j+1){
+        const value = (truckBeathData[j].beathUseRete*100)-100
+        if(j===0){
+          context.moveTo(start_x+(j*framePerPx),rateStart_y-value)
+        }else{
+          context.lineTo(start_x+(j*framePerPx),rateStart_y-value)
+        }
+      }
       context.stroke()
-      context.beginPath()
-      context.strokeStyle = 'lime'
-      context.font="30px Arial";
-      context.lineWidth=1
-      context.strokeText(`${currentTime}`,150,150)
-      context.beginPath()
+      const operation = truckBeathData.map((data,idx)=>{
+        return {...data, path:{coordinate:[[start_x+(idx*framePerPx),rateStart_y-50],[start_x+(idx*framePerPx),rateStart_y+600]],strokeStyle:"lime"}}
+      })
+      const movesbase = [{operation}]
+      this.props.actions.setMovesBase(movesbase)
+    }
+    for(let i=0; i<15; i=i+1){
+      context.strokeStyle = '#CCCCCC'
+      const start_y = clientHeight+140+(i*30)
+      context.fillText(`truck_beath_${i+1}`,50,start_y)
+      context.strokeRect(start_x,start_y,graphwidth,24)
       context.strokeStyle = 'red'
-      context.moveTo(100,100)
-      context.arcTo(150,100,150,150,30)
-      context.lineWidth=5
-      context.stroke()
+      if(this.state.beathDataArray !== null){
+        const currentdata = this.state.beathDataArray[i]
+        const dataLength = currentdata.length
+        context.beginPath()
+        for(let j=0; j<dataLength; j=j+1){
+          const value = (currentdata[j]*12)-24
+          if(j===0){
+            context.moveTo(start_x+(j*framePerPx),start_y-value)
+          }else{
+            context.lineTo(start_x+(j*framePerPx),start_y-value)
+          }
+        }
+        context.stroke()
+      }
     }
   }
 
@@ -140,15 +172,20 @@ class App extends Container {
     const { actions, viewport, movedData, movesbase } = this.props;
     const PointCloudData = movedData.filter(x=>x.pointCloud);
     const PathData = movedData
+    const {beathUseRete,realtime,frame} = movedData.length>0 ? movedData[0] : {beathUseRete:0,realtime:0,frame:0}
     const { position } = this.state;
     const {paused=false,currentTime=0,duration=0} = this.videoRef.current ? this.videoRef.current.player :{}
+    const {clientWidth=0,clientHeight=0} = this.videoRef.current ? this.videoRef.current.videoRef.current :{}
 
     return (
       <div>
 
-        <Controller {...this.props} {...this.state} updateState={this.updateState.bind(this)}
+        <Controller {...this.props} {...this.state} updateState={this.updateState.bind(this)} realtime={realtime}
           paused={paused ? true : false} videoControl={this.videoRef.current&&this.videoRef.current.player}
           videoplay={this.videoplay.bind(this)} videopause={this.videopause.bind(this)} videorestart={this.videorestart.bind(this)}/>
+
+          <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl}
+            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
 
           <VideoAnnotationLayer ref={this.videoRef}
           videoUrl={this.state.videoUrl}
@@ -191,9 +228,13 @@ class App extends Container {
           zoom:{viewport.zoom}&nbsp;
           bearing:{viewport.bearing}&nbsp;
           pitch:{viewport.pitch}&nbsp;*/}
-          currentTime:{currentTime ? currentTime : 0}&nbsp;
-          duration:{duration ? duration : 0}&nbsp;
-          paused:{paused !== undefined ? paused ? 'true' : 'false' : 'undefined'}
+          videoWidth:{clientWidth}&nbsp;
+          videoHeight:{clientHeight}&nbsp;
+          beathUseRete:{(beathUseRete*100)|0}%&nbsp;
+          realtime:{realtime|0}&nbsp;
+          frame:{frame}&nbsp;
+          videoDuration:{duration ? duration : 0}&nbsp;
+          videoTime:{currentTime ? currentTime : 0}&nbsp;
         </div>
         {/*<svg width={viewport.width} height={viewport.height} className="harmovis_overlay">
           <g fill="white" fontSize="12">
@@ -212,3 +253,22 @@ class App extends Container {
   }
 }
 export default connectToHarmowareVis(App);
+
+const CanvasComponent = (props)=>{
+  const canvas = React.useRef(undefined);
+
+  React.useEffect(()=>{
+    if(canvas.current !== undefined){
+      if(props.videoUrl){
+        const context = canvas.current.getContext('2d');
+        props.updateCanvas(context,props.width,props.height,props.truckBeathData);
+      }
+    }
+  },[canvas,props.videoUrl,props.width,props.height,props.truckBeathData])
+
+  const Result = React.useMemo(()=>
+    <canvas ref={canvas} width={props.width} height={props.height} className={props.className}/>
+  ,[props])
+
+  return Result
+}

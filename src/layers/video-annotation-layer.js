@@ -35,14 +35,14 @@ class VideoAnnotationLayer extends React.Component{
             const videoHeight = this.videoRef.current ? this.videoRef.current.clientHeight:0
             return (    
                 <>
-                <video ref={this.videoRef} className={this.props.className}
+                <video ref={this.videoRef} className={this.props.className} width={1600}
                     id={this.props.id} muted={this.props.muted} loop={this.props.loop}
                     autoPlay={this.props.autoPlay} controls={this.props.controls}
                     src={this.props.videoUrl}>
                     非対応の動画データ
                 </video>
                 {this.props.AnnotationPropsArray.map((AnnotationProps,idx)=>
-                    <AnnotationLayer key={idx} width={videoWidth} height={videoHeight}
+                    <AnnotationLayer key={idx} width={videoWidth} height={900}
                         className={AnnotationProps.className||this.props.className}
                         data={AnnotationProps.data}/>)}
                 </>
