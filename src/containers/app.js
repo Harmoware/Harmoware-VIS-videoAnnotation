@@ -100,7 +100,11 @@ class App extends Container {
       }
       context.stroke()
       const operation = truckBeathData.map((data,idx)=>{
-        return {...data, path:{coordinate:[[start_x+(idx*framePerPx),rateStart_y],[start_x+(idx*framePerPx),rateStart_y+565]],strokeStyle:"lime"}}
+        const wk_x = start_x+(idx*framePerPx)
+        return {...data,
+          path:{coordinate:[[wk_x,rateStart_y-30],[wk_x,rateStart_y+565]],strokeStyle:"lime"},
+          text:{strokeText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},strokeStyle:"lime"}
+        }
       })
       const movesbase = [{operation}]
       this.props.actions.setMovesBase(movesbase)

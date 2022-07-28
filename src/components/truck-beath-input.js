@@ -19,9 +19,9 @@ export const TruckBeathInput = (props)=>{
             const readdata = linedata.map((lineArray)=>{
                 return lineArray.split(',')
             })
-            const dataLength = readdata[0].length
+            const titledata = readdata.shift()
+            const dataLength = titledata.length
             const filterData = readdata.filter((data)=>data.length===dataLength)
-            const titledata = filterData.shift()
             const ngData = filterData.find((data,idx)=>parseInt(data[0])!==idx)
             if(ngData!==undefined){
                 window.alert('CSVデータのフレーム数が不正');

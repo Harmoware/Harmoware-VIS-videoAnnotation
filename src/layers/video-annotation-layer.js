@@ -123,7 +123,7 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                 context.globalAlpha = globalAlpha || 1
                 context.stroke()
             }
-        }else
+        }
         if(annotationData.polygon){
             const {coordinate,fillStyle,strokeStyle,lineWidth,globalAlpha} = annotationData.polygon
             if(coordinate && Array.isArray(coordinate)){
@@ -147,7 +147,7 @@ const updateCanvas = (context,annotationDataArray,canvasWidth,canvasHeight)=>{
                     context.stroke()
                 }
             }
-        }else
+        }
         if(annotationData.text){
             const {fillText,strokeText,fillStyle,strokeStyle,font,globalAlpha} = annotationData.text
             if(fillText || strokeText){
