@@ -19,7 +19,9 @@ export default class Controller extends React.Component {
     super(props)
     this.state = {
       hiduke: null,
-      speed:1
+      speed:1,
+      videoFps: 30,
+      realFrameInterval: 8.1665
     }
   }
 
@@ -92,7 +94,9 @@ export default class Controller extends React.Component {
             <li className="flex_row">
                 <div className="harmovis_input_button_column" title='3D object data selection'>
                 <label htmlFor="TruckBeathInput">
-                TruckBeath Data Selection<TruckBeathInput actions={actions} id="TruckBeathInput" updateState={updateState}/>
+                TruckBeath Data Selection
+                <TruckBeathInput actions={actions} id="TruckBeathInput" updateState={updateState}
+                videoFps={this.state.videoFps} realFrameInterval={this.state.realFrameInterval}/>
                 </label>
                 <div>{truckBeathFileName}</div>
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const TruckBeathInput = (props)=>{
-    const { actions, id } = props;
+    const { actions, id, videoFps, realFrameInterval } = props;
 
     const onSelect = (e)=>{
         const reader = new FileReader();
@@ -19,7 +19,8 @@ export const TruckBeathInput = (props)=>{
             const readdata = linedata.map((lineArray)=>{
                 return lineArray.split(',')
             })
-            const filterData = readdata.filter((data)=>data.length===16)
+            const dataLength = readdata[0].length
+            const filterData = readdata.filter((data)=>data.length===dataLength)
             const titledata = filterData.shift()
             const ngData = filterData.find((data,idx)=>parseInt(data[0])!==idx)
             if(ngData!==undefined){
@@ -27,7 +28,7 @@ export const TruckBeathInput = (props)=>{
                 console.log('CSVデータのフレーム数が不正')
                 return
             }
-            let beathDataArray = new Array(15);
+            let beathDataArray = new Array(dataLength-1);
             const truckBeathData = filterData.map((data,idx)=>{
                 const frame = parseInt(data[0])
                 let beathData = []
@@ -45,8 +46,8 @@ export const TruckBeathInput = (props)=>{
                 }
                 return {
                     frame:frame,
-                    elapsedtime:(frame/30),
-                    realtime:(frame*8.1665),
+                    elapsedtime:(frame/videoFps),
+                    realtime:(frame*realFrameInterval),
                     beathData:beathData,
                     beathUseRete:(beathUseCount/(data.length-1))
                 }

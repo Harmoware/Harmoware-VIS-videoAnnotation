@@ -72,7 +72,7 @@ class App extends Container {
     context.textAlign="left";
     context.textBaseline="top";
     context.font = '12px sans-serif'
-    context.lineWidth = 0.5
+    context.lineWidth = 1
     const start_x = 150
     const framecount = truckBeathData!==null ? truckBeathData.length : 0
     const graphwidth = width-start_x
@@ -81,10 +81,13 @@ class App extends Container {
     context.fillText(`truck_beath_rate`,30,rateStart_y)
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
     if(framecount>0){
+      context.beginPath()
       for(let j=0; j<truckBeathData.length; j=j+100){
-        context.strokeRect(start_x+(j*framePerPx),rateStart_y-15,1,15)
+        context.moveTo(start_x+(j*framePerPx),rateStart_y-15)
+        context.lineTo(start_x+(j*framePerPx),rateStart_y)
         context.fillText(`${j}`,start_x+(j*framePerPx)+2,rateStart_y-15)
       }
+      context.stroke()
       context.strokeStyle = 'yellow'
       context.beginPath()
       for(let j=0; j<truckBeathData.length; j=j+1){
@@ -102,7 +105,11 @@ class App extends Container {
       const movesbase = [{operation}]
       this.props.actions.setMovesBase(movesbase)
     }
-    for(let i=0; i<15; i=i+1){
+    let beathCount = 15
+    if(this.state.beathDataArray !== null){
+      beathCount = this.state.beathDataArray.length
+    }
+    for(let i=0; i<beathCount; i=i+1){
       context.strokeStyle = '#CCCCCC'
       const start_y = clientHeight+140+(i*30)
       context.fillText(`truck_beath_${i+1}`,50,start_y)
