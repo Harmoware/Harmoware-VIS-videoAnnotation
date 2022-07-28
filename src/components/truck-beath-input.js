@@ -52,8 +52,7 @@ export const TruckBeathInput = (props)=>{
                     beathUseRete:(beathUseCount/(data.length-1))
                 }
             })
-            console.log({truckBeathData})
-            console.log({beathDataArray})
+            beathDataArray.reverse()
             actions.setInputFilename({ truckBeathFileName: file_name });
             props.updateState({truckBeathData,beathDataArray})
             //actions.setMovesBase(readdata);
