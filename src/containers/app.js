@@ -66,6 +66,11 @@ class App extends Container {
 
   updateCanvas(context,width,height,truckBeathData){
     const clientHeight = 250
+    const start_x = 150
+    const framecount = truckBeathData!==null ? truckBeathData.length : 0
+    const graphwidth = width-start_x-50
+    const framePerPx = framecount>0 ? graphwidth/framecount:0
+    const rateStart_y = clientHeight+20
     context.clearRect(0,0,width,height)
     context.strokeStyle = '#CCCCCC'
     context.fillStyle = '#CCCCCC'
@@ -73,12 +78,7 @@ class App extends Container {
     context.textBaseline="top";
     context.font = '12px sans-serif'
     context.lineWidth = 1
-    const start_x = 150
-    const framecount = truckBeathData!==null ? truckBeathData.length : 0
-    const graphwidth = width-start_x
-    const framePerPx = framecount>0 ? graphwidth/framecount:0
-    const rateStart_y = clientHeight+20
-    context.fillText(`truck_beath_rate`,30,rateStart_y)
+    context.fillText(`beath use rate`,30,rateStart_y)
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
     if(framecount>0){
       context.beginPath()
@@ -100,7 +100,7 @@ class App extends Container {
       }
       context.stroke()
       const operation = truckBeathData.map((data,idx)=>{
-        return {...data, path:{coordinate:[[start_x+(idx*framePerPx),rateStart_y-50],[start_x+(idx*framePerPx),rateStart_y+600]],strokeStyle:"lime"}}
+        return {...data, path:{coordinate:[[start_x+(idx*framePerPx),rateStart_y],[start_x+(idx*framePerPx),rateStart_y+565]],strokeStyle:"lime"}}
       })
       const movesbase = [{operation}]
       this.props.actions.setMovesBase(movesbase)
@@ -112,7 +112,7 @@ class App extends Container {
     for(let i=0; i<beathCount; i=i+1){
       context.strokeStyle = '#CCCCCC'
       const start_y = clientHeight+140+(i*30)
-      context.fillText(`truck_beath_${i+1}`,50,start_y)
+      context.fillText(`beath no.${i+1}`,50,start_y)
       context.strokeRect(start_x,start_y,graphwidth,24)
       context.strokeStyle = 'red'
       if(this.state.beathDataArray !== null){

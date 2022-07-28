@@ -52,8 +52,10 @@ input.harmovis_input_number[type="number"]{
 video.videoannotationlayer {
   position: fixed;
   z-index: 0;
+  margin: 10px;
 }
 canvas.videoannotationlayer {
   position: fixed;
   z-index: 10;
+  margin: 10px;
 }
