@@ -101,9 +101,15 @@ class App extends Container {
       context.stroke()
       const operation = truckBeathData.map((data,idx)=>{
         const wk_x = start_x+(idx*framePerPx)
+        const beathText = data.beathData.map((beathData,idx)=>{
+          const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
+          return {fillText:{text:`${condition}`,x:wk_x+2,y:clientHeight+155+(idx*30)},fillStyle:"lime"}
+        })
         return {...data,
           path:{coordinate:[[wk_x,rateStart_y-30],[wk_x,rateStart_y+565]],strokeStyle:"lime"},
-          text:{strokeText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},strokeStyle:"lime"}
+          text:[{fillText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},fillStyle:"lime"},
+                {fillText:{text:`${(data.beathUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"lime"},
+                ...beathText]
         }
       })
       const movesbase = [{operation}]

@@ -44,6 +44,7 @@ export const TruckBeathInput = (props)=>{
                         beathUseCount = beathUseCount + (setData>0 ? 1 : 0)
                     }
                 }
+                beathData.reverse()
                 return {
                     frame:frame,
                     elapsedtime:(frame/videoFps),
