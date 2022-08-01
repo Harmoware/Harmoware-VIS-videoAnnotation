@@ -21,7 +21,7 @@ export default class Controller extends React.Component {
       hiduke: null,
       speed:1,
       videoFps: 30,
-      realFrameInterval: 8.1665
+      realFrameInterval: (26100/3196)
     }
   }
 
@@ -172,7 +172,7 @@ export default class Controller extends React.Component {
                   min={0} max={duration} onChange={this.setTime.bind(this)} />
             </li>
             <li className="flex_column">
-              <input type="range" value={currentTime} min={0} max={duration} step={0.025} style={{'width':'100%'}}
+              <input type="range" value={currentTime} min={0} max={duration} step={(1/100)} style={{'width':'100%'}}
                 onChange={this.setTime.bind(this)} className='harmovis_input_range' />
             </li>
 
