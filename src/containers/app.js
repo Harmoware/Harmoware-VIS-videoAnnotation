@@ -121,7 +121,7 @@ class App extends Container {
         wkArray.reverse()
         const beathBoxText = wkArray.map((beathData,idx)=>{
           const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
-          return {fillText:{text:`${condition}`,x:(idx*interval)+30,y:210},fillStyle:"#CCCCCC"}
+          return {fillText:{text:`${condition}`,x:(idx*interval)+30,y:210},fillStyle:"#CCCCCC",font:'12px sans-serif'}
         })
         const beathText = data.beathData.map((beathData,idx)=>{
           const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
