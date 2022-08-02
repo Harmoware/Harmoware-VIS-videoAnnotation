@@ -80,6 +80,22 @@ class App extends Container {
     context.lineWidth = 1
     context.fillText(`beath use rate`,30,rateStart_y)
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
+    let beathCount = 15
+    if(this.state.beathDataArray !== null){
+      beathCount = this.state.beathDataArray.length
+    }
+    context.strokeRect(0,0,width,220)
+    context.beginPath()
+    context.moveTo(0,0)
+    context.lineTo(width,0)
+    const interval = width/beathCount
+    for(let i=0; i<=width; i=i+interval){
+      context.moveTo(i,0)
+      context.lineTo(i,220)
+    }
+    context.moveTo(0,220)
+    context.lineTo(width,220)
+    context.stroke()
     if(framecount>0){
       context.beginPath()
       for(let j=0; j<truckBeathData.length; j=j+100){
@@ -101,6 +117,12 @@ class App extends Container {
       context.stroke()
       const operation = truckBeathData.map((data,idx)=>{
         const wk_x = start_x+(idx*framePerPx)
+        const wkArray = [...data.beathData]
+        wkArray.reverse()
+        const beathBoxText = wkArray.map((beathData,idx)=>{
+          const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
+          return {fillText:{text:`${condition}`,x:(idx*interval)+30,y:210},fillStyle:"#CCCCCC"}
+        })
         const beathText = data.beathData.map((beathData,idx)=>{
           const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
           return {fillText:{text:`${condition}`,x:wk_x+2,y:clientHeight+155+(idx*30)},fillStyle:"lime"}
@@ -109,15 +131,11 @@ class App extends Container {
           path:{coordinate:[[wk_x,rateStart_y-30],[wk_x,rateStart_y+565]],strokeStyle:"lime"},
           text:[{fillText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},fillStyle:"lime"},
                 {fillText:{text:`${(data.beathUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"lime"},
-                ...beathText]
+                ...beathText, ...beathBoxText]
         }
       })
       const movesbase = [{operation}]
       this.props.actions.setMovesBase(movesbase)
-    }
-    let beathCount = 15
-    if(this.state.beathDataArray !== null){
-      beathCount = this.state.beathDataArray.length
     }
     for(let i=0; i<beathCount; i=i+1){
       context.strokeStyle = '#CCCCCC'

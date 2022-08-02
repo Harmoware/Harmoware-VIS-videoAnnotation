@@ -35,7 +35,7 @@ class VideoAnnotationLayer extends React.Component{
             const videoHeight = this.videoRef.current ? this.videoRef.current.clientHeight:0
             return (    
                 <>
-                <video ref={this.videoRef} className={this.props.className} width={1600}
+                <video ref={this.videoRef} className={this.props.className} width={1605}
                     id={this.props.id} muted={this.props.muted} loop={this.props.loop}
                     autoPlay={this.props.autoPlay} controls={this.props.controls}
                     src={this.props.videoUrl}>
