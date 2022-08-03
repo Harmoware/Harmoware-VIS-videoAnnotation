@@ -23,6 +23,8 @@ class App extends Container {
       videoUrl: undefined,
       truckBeathData: null,
       beathDataArray: null,
+      clickArea:[0,0,0,0],
+      framePerPx:0
     };
     this.videoRef = React.createRef()
     this.currentTime = 0
@@ -71,6 +73,7 @@ class App extends Container {
     const graphwidth = width-start_x-50
     const framePerPx = framecount>0 ? graphwidth/framecount:0
     const rateStart_y = clientHeight+20
+    this.setState({clickArea:[start_x,rateStart_y-15,start_x+graphwidth,rateStart_y+565],framePerPx})
     context.clearRect(0,0,width,height)
     context.strokeStyle = '#CCCCCC'
     context.fillStyle = '#CCCCCC'
@@ -121,7 +124,8 @@ class App extends Container {
         wkArray.reverse()
         const beathBoxText = wkArray.map((beathData,idx)=>{
           const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
-          return {fillText:{text:`${condition}`,x:(idx*interval)+30,y:210},fillStyle:"#CCCCCC",font:'12px sans-serif'}
+          const shift = beathData===1 ? 15 : beathData===2 ? 55 :0
+          return {fillText:{text:`${condition}`,x:(idx*interval)+shift,y:210},fillStyle:"#CCCCCC",font:'12px sans-serif'}
         })
         const beathText = data.beathData.map((beathData,idx)=>{
           const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
@@ -206,6 +210,19 @@ class App extends Container {
       this.videoRef.current.player.play()
     }
   }
+  canvasClick(viewX,viewY){
+    const [x1=0,y1=0,x2=0,y2=0] = this.state.clickArea
+    if(x1<viewX && viewX<x2 && y1<viewY && viewY<y2){
+      const {duration=0} = this.videoRef.current ? this.videoRef.current.player :{}
+      if(duration > 0 && x1 < x2){
+        const unittime = duration / (x2 - x1)
+        const setTime = unittime * (viewX - x1)
+        this.props.actions.setTime(setTime);
+        this.videoRef.current.player.currentTime = setTime
+        console.log(`x:${viewX},y:${viewY}`)
+      }
+    }
+  }
 
   render() {
     const { actions, viewport, movedData, movesbase } = this.props;
@@ -223,12 +240,12 @@ class App extends Container {
           paused={paused ? true : false} videoControl={this.videoRef.current&&this.videoRef.current.player}
           videoplay={this.videoplay.bind(this)} videopause={this.videopause.bind(this)} videorestart={this.videorestart.bind(this)}/>
 
-          <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl}
-            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
-
           <VideoAnnotationLayer ref={this.videoRef}
           videoUrl={this.state.videoUrl}
           AnnotationPropsArray={[{data:PathData}]}/>
+
+          <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl} canvasClick={this.canvasClick.bind(this)}
+            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
 
           {/*<div className="harmovis_area">
           <HarmoVisLayers
@@ -295,6 +312,32 @@ export default connectToHarmowareVis(App);
 
 const CanvasComponent = (props)=>{
   const canvas = React.useRef(undefined);
+
+  React.useEffect(()=>{
+    if(canvas.current !== undefined){
+      canvas.current.onmousedown = function(e) {
+        const rect = e.target.getBoundingClientRect();
+        const viewX = e.clientX - rect.left
+        const viewY = e.clientY - rect.top;
+        props.canvasClick(viewX,viewY)
+        canvas.current.onmousemove = function(e) {
+          const rect = e.target.getBoundingClientRect();
+          const viewX = e.clientX - rect.left
+          const viewY = e.clientY - rect.top;
+          props.canvasClick(viewX,viewY)
+        }
+      }
+      canvas.current.onmouseup = function(e) {
+        canvas.current.onmousemove = function(e) {}
+      }
+      canvas.current.onmouseover = function(e) {
+        canvas.current.onmousemove = function(e) {}
+      }
+      canvas.current.onmouseout = function(e) {
+        canvas.current.onmousemove = function(e) {}
+      }
+    }
+  },[canvas])
 
   React.useEffect(()=>{
     if(canvas.current !== undefined){
