@@ -240,12 +240,14 @@ class App extends Container {
           paused={paused ? true : false} videoControl={this.videoRef.current&&this.videoRef.current.player}
           videoplay={this.videoplay.bind(this)} videopause={this.videopause.bind(this)} videorestart={this.videorestart.bind(this)}/>
 
+          <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl}
+            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
+
           <VideoAnnotationLayer ref={this.videoRef}
           videoUrl={this.state.videoUrl}
           AnnotationPropsArray={[{data:PathData}]}/>
 
-          <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl} canvasClick={this.canvasClick.bind(this)}
-            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
+          <MouseCaptureCanvas className="videoannotationlayer" canvasClick={this.canvasClick.bind(this)} width={clientWidth} height={900}/>
 
           {/*<div className="harmovis_area">
           <HarmoVisLayers
@@ -311,45 +313,55 @@ class App extends Container {
 export default connectToHarmowareVis(App);
 
 const CanvasComponent = (props)=>{
-  const canvas = React.useRef(undefined);
+  const canvasRef = React.useRef(undefined);
 
   React.useEffect(()=>{
-    if(canvas.current !== undefined){
-      canvas.current.onmousedown = function(e) {
+    if(canvasRef.current !== undefined){
+      if(props.videoUrl){
+        const context = canvasRef.current.getContext('2d');
+        props.updateCanvas(context,props.width,props.height,props.truckBeathData);
+      }
+    }
+  },[canvasRef,props.videoUrl,props.width,props.height,props.truckBeathData])
+
+  const Result = React.useMemo(()=>
+    <canvas ref={canvasRef} width={props.width} height={props.height} className={props.className}/>
+  ,[props])
+
+  return Result
+}
+
+const MouseCaptureCanvas = (props)=>{
+  const canvasRef = React.useRef(undefined);
+
+  React.useEffect(()=>{
+    if(canvasRef.current !== undefined){
+      canvasRef.current.onmousedown = function(e) {
         const rect = e.target.getBoundingClientRect();
         const viewX = e.clientX - rect.left
         const viewY = e.clientY - rect.top;
         props.canvasClick(viewX,viewY)
-        canvas.current.onmousemove = function(e) {
+        canvasRef.current.onmousemove = function(e) {
           const rect = e.target.getBoundingClientRect();
           const viewX = e.clientX - rect.left
           const viewY = e.clientY - rect.top;
           props.canvasClick(viewX,viewY)
         }
       }
-      canvas.current.onmouseup = function(e) {
-        canvas.current.onmousemove = function(e) {}
+      canvasRef.current.onmouseup = function(e) {
+        canvasRef.current.onmousemove = function(e) {}
       }
-      canvas.current.onmouseover = function(e) {
-        canvas.current.onmousemove = function(e) {}
+      canvasRef.current.onmouseover = function(e) {
+        canvasRef.current.onmousemove = function(e) {}
       }
-      canvas.current.onmouseout = function(e) {
-        canvas.current.onmousemove = function(e) {}
-      }
-    }
-  },[canvas])
-
-  React.useEffect(()=>{
-    if(canvas.current !== undefined){
-      if(props.videoUrl){
-        const context = canvas.current.getContext('2d');
-        props.updateCanvas(context,props.width,props.height,props.truckBeathData);
+      canvasRef.current.onmouseout = function(e) {
+        canvasRef.current.onmousemove = function(e) {}
       }
     }
-  },[canvas,props.videoUrl,props.width,props.height,props.truckBeathData])
+  },[canvasRef])
 
   const Result = React.useMemo(()=>
-    <canvas ref={canvas} width={props.width} height={props.height} className={props.className}/>
+    <canvas ref={canvasRef} width={props.width} height={props.height} className={props.className}/>
   ,[props])
 
   return Result
