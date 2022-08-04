@@ -75,13 +75,16 @@ class App extends Container {
     const rateStart_y = clientHeight+20
     this.setState({clickArea:[start_x,rateStart_y-15,start_x+graphwidth,rateStart_y+565],framePerPx})
     context.clearRect(0,0,width,height)
-    context.strokeStyle = '#CCCCCC'
-    context.fillStyle = '#CCCCCC'
     context.textAlign="left";
     context.textBaseline="top";
     context.font = '12px sans-serif'
     context.lineWidth = 1
+    context.fillStyle = 'yellow'
     context.fillText(`beath use rate`,30,rateStart_y)
+    context.fillStyle = 'aqua'
+    context.fillText(`door open rate`,30,rateStart_y+20)
+    context.strokeStyle = '#CCCCCC'
+    context.fillStyle = '#CCCCCC'
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
     let beathCount = 15
     if(this.state.beathDataArray !== null){
@@ -92,9 +95,12 @@ class App extends Container {
     context.moveTo(0,0)
     context.lineTo(width,0)
     const interval = width/beathCount
+    let k = 0
     for(let i=0; i<=width; i=i+interval){
       context.moveTo(i,0)
       context.lineTo(i,220)
+      context.fillText(`beath no.${beathCount-k}`,i+15,185)
+      k=k+1
     }
     context.moveTo(0,220)
     context.lineTo(width,220)
@@ -118,6 +124,17 @@ class App extends Container {
         }
       }
       context.stroke()
+      context.strokeStyle = 'aqua'
+      context.beginPath()
+      for(let j=0; j<truckBeathData.length; j=j+1){
+        const value = (truckBeathData[j].doorOpenRete*100)-100
+        if(j===0){
+          context.moveTo(start_x+(j*framePerPx),rateStart_y-value)
+        }else{
+          context.lineTo(start_x+(j*framePerPx),rateStart_y-value)
+        }
+      }
+      context.stroke()
       const operation = truckBeathData.map((data,idx)=>{
         const wk_x = start_x+(idx*framePerPx)
         const wkArray = [...data.beathData]
@@ -134,7 +151,8 @@ class App extends Container {
         return {...data,
           path:{coordinate:[[wk_x,rateStart_y-30],[wk_x,rateStart_y+565]],strokeStyle:"lime"},
           text:[{fillText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},fillStyle:"lime"},
-                {fillText:{text:`${(data.beathUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"lime"},
+                {fillText:{text:`${(data.beathUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"yellow"},
+                {fillText:{text:`${(data.doorOpenRete*100)|0}%`,x:wk_x+30,y:rateStart_y+112},fillStyle:"aqua"},
                 ...beathText, ...beathBoxText]
         }
       })

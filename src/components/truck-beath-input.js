@@ -36,6 +36,7 @@ export const TruckBeathInput = (props)=>{
                 const frame = parseInt(data[0])
                 let beathData = []
                 let beathUseCount = 0
+                let doorOpneCount = 0
                 for(let i=0; i<data.length; i=i+1){
                     if(i>0){
                         const setData = parseInt(data[i]) 
@@ -45,6 +46,7 @@ export const TruckBeathInput = (props)=>{
                         }
                         beathDataArray[i-1].push(setData)
                         beathUseCount = beathUseCount + (setData>0 ? 1 : 0)
+                        doorOpneCount = doorOpneCount + (setData===1 ? 1 : 0)
                     }
                 }
                 beathData.reverse()
@@ -53,7 +55,8 @@ export const TruckBeathInput = (props)=>{
                     elapsedtime:(frame/videoFps),
                     realtime:(frame*realFrameInterval),
                     beathData:beathData,
-                    beathUseRete:(beathUseCount/(data.length-1))
+                    beathUseRete:(beathUseCount/(data.length-1)),
+                    doorOpenRete:(doorOpneCount/(data.length-1))
                 }
             })
             beathDataArray.reverse()
