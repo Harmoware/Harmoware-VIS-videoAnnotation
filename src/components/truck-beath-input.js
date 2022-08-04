@@ -28,6 +28,9 @@ export const TruckBeathInput = (props)=>{
                 console.log('CSVデータのフレーム数が不正')
                 return
             }
+            const lastData = filterData[filterData.length-1].concat()
+            lastData[0] = filterData.length
+            filterData.push(lastData)
             let beathDataArray = new Array(dataLength-1);
             const truckBeathData = filterData.map((data,idx)=>{
                 const frame = parseInt(data[0])
