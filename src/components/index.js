@@ -64,10 +64,11 @@ export default class Controller extends React.Component {
   }
 
   render() {
-    const { actions, inputFileName, animatePause, animateReverse, viewport, leading, objFileData, videoplay, videopause, videorestart, paused,
+    const { actions, inputFileName, truckBeathData, animateReverse, viewport, leading, objFileData, videoplay, videopause, videorestart, paused,
       settime, timeBegin, timeLength, secperhour, objFileName, position, getOrientation, updateState, videoControl, realtime } = this.props;
     const { movesFileName, annotationFileName, truckBeathFileName } = inputFileName;
     const {currentTime=0,duration=0} = videoControl ? videoControl :{}
+    const framecount = truckBeathData!==null ? truckBeathData.length-1 : 1
 
     return (
         <div className="harmovis_controller">
@@ -172,7 +173,7 @@ export default class Controller extends React.Component {
                   min={0} max={duration} onChange={this.setTime.bind(this)} />
             </li>
             <li className="flex_column">
-              <input type="range" value={currentTime} min={0} max={duration} step={(1/100)} style={{'width':'100%'}}
+              <input type="range" value={currentTime} min={0} max={duration} step={(duration/framecount)} style={{'width':'100%'}}
                 onChange={this.setTime.bind(this)} className='harmovis_input_range' />
             </li>
 
