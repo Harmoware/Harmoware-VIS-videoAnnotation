@@ -4,7 +4,7 @@ import { MovesInput, PlayButton, PauseButton, ForwardButton, ReverseButton,
   SpeedValue, SpeedRange } from 'harmoware-vis';
 import { ObjectInput } from './object-input.js';
 import { AnnotationInput } from './annotation-input';
-import { TruckBeathInput } from './truck-beath-input';
+import { TruckBerthInput } from './truck-berth-input';
 import { VideoInput } from './video-input';
 
 const InputNumber = ({caption,value,step,min,max,onChange}) => {
@@ -64,11 +64,11 @@ export default class Controller extends React.Component {
   }
 
   render() {
-    const { actions, inputFileName, truckBeathData, animateReverse, viewport, leading, objFileData, videoplay, videopause, videorestart, paused,
+    const { actions, inputFileName, truckBerthData, animateReverse, viewport, leading, objFileData, videoplay, videopause, videorestart, paused,
       settime, timeBegin, timeLength, secperhour, objFileName, position, getOrientation, updateState, videoControl, realtime } = this.props;
-    const { movesFileName, annotationFileName, truckBeathFileName } = inputFileName;
+    const { movesFileName, annotationFileName, truckBerthFileName } = inputFileName;
     const {currentTime=0,duration=0} = videoControl ? videoControl :{}
-    const framecount = truckBeathData!==null ? truckBeathData.length-1 : 1
+    const framecount = truckBerthData!==null ? truckBerthData.length-1 : 1
 
     return (
         <div className="harmovis_controller">
@@ -94,12 +94,12 @@ export default class Controller extends React.Component {
             </li>*/}
             <li className="flex_row">
                 <div className="harmovis_input_button_column" title='3D object data selection'>
-                <label htmlFor="TruckBeathInput">
-                TruckBeath Data Selection
-                <TruckBeathInput actions={actions} id="TruckBeathInput" updateState={updateState}
+                <label htmlFor="TruckBerthInput">
+                TruckBerth Data Selection
+                <TruckBerthInput actions={actions} id="TruckBerthInput" updateState={updateState}
                 videoFps={this.state.videoFps} realFrameInterval={this.state.realFrameInterval}/>
                 </label>
-                <div>{truckBeathFileName}</div>
+                <div>{truckBerthFileName}</div>
                 </div>
             </li>
             <li className="flex_column">

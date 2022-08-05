@@ -21,8 +21,8 @@ class App extends Container {
       opacity: 0.1,
       currentTime: 0,
       videoUrl: undefined,
-      truckBeathData: null,
-      beathDataArray: null,
+      truckBerthData: null,
+      berthDataArray: null,
       clickArea:[0,0,0,0],
       framePerPx:0
     };
@@ -66,10 +66,10 @@ class App extends Container {
     this.setState(updateData);
   }
 
-  updateCanvas(context,width,height,truckBeathData){
+  updateCanvas(context,width,height,truckBerthData){
     const clientHeight = 250
     const start_x = 150
-    const framecount = truckBeathData!==null ? truckBeathData.length : 0
+    const framecount = truckBerthData!==null ? truckBerthData.length : 0
     const graphwidth = width-start_x-50
     const framePerPx = framecount>0 ? graphwidth/framecount:0
     const rateStart_y = clientHeight+20
@@ -80,26 +80,26 @@ class App extends Container {
     context.font = '12px sans-serif'
     context.lineWidth = 1
     context.fillStyle = 'yellow'
-    context.fillText(`beath use rate`,30,rateStart_y)
+    context.fillText(`berth use rate`,30,rateStart_y)
     context.fillStyle = 'aqua'
     context.fillText(`door open rate`,30,rateStart_y+20)
     context.strokeStyle = '#CCCCCC'
     context.fillStyle = '#CCCCCC'
     context.strokeRect(start_x,rateStart_y,graphwidth,100)
-    let beathCount = 15
-    if(this.state.beathDataArray !== null){
-      beathCount = this.state.beathDataArray.length
+    let berthCount = 15
+    if(this.state.berthDataArray !== null){
+      berthCount = this.state.berthDataArray.length
     }
     context.strokeRect(0,0,width,220)
     context.beginPath()
     context.moveTo(0,0)
     context.lineTo(width,0)
-    const interval = width/beathCount
+    const interval = width/berthCount
     let k = 0
     for(let i=0; i<=width; i=i+interval){
       context.moveTo(i,0)
       context.lineTo(i,220)
-      context.fillText(`beath no.${beathCount-k}`,i+15,185)
+      context.fillText(`berth no.${berthCount-k}`,i+15,185)
       k=k+1
     }
     context.moveTo(0,220)
@@ -107,7 +107,7 @@ class App extends Container {
     context.stroke()
     if(framecount>0){
       context.beginPath()
-      for(let j=0; j<truckBeathData.length; j=j+100){
+      for(let j=0; j<truckBerthData.length; j=j+100){
         context.moveTo(start_x+(j*framePerPx),rateStart_y-15)
         context.lineTo(start_x+(j*framePerPx),rateStart_y)
         context.fillText(`${j}`,start_x+(j*framePerPx)+2,rateStart_y-15)
@@ -115,8 +115,8 @@ class App extends Container {
       context.stroke()
       context.strokeStyle = 'yellow'
       context.beginPath()
-      for(let j=0; j<truckBeathData.length; j=j+1){
-        const value = (truckBeathData[j].beathUseRete*100)-100
+      for(let j=0; j<truckBerthData.length; j=j+1){
+        const value = (truckBerthData[j].berthUseRete*100)-100
         if(j===0){
           context.moveTo(start_x+(j*framePerPx),rateStart_y-value)
         }else{
@@ -126,8 +126,8 @@ class App extends Container {
       context.stroke()
       context.strokeStyle = 'aqua'
       context.beginPath()
-      for(let j=0; j<truckBeathData.length; j=j+1){
-        const value = (truckBeathData[j].doorOpenRete*100)-100
+      for(let j=0; j<truckBerthData.length; j=j+1){
+        const value = (truckBerthData[j].doorOpenRete*100)-100
         if(j===0){
           context.moveTo(start_x+(j*framePerPx),rateStart_y-value)
         }else{
@@ -135,38 +135,38 @@ class App extends Container {
         }
       }
       context.stroke()
-      const operation = truckBeathData.map((data,idx)=>{
+      const operation = truckBerthData.map((data,idx)=>{
         const wk_x = start_x+(idx*framePerPx)
-        const wkArray = [...data.beathData]
+        const wkArray = [...data.berthData]
         wkArray.reverse()
-        const beathBoxText = wkArray.map((beathData,idx)=>{
-          const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
-          const shift = beathData===1 ? 15 : beathData===2 ? 55 :0
+        const berthBoxText = wkArray.map((berthData,idx)=>{
+          const condition = berthData===1 ? 'open' : berthData===2 ? 'close' :""
+          const shift = berthData===1 ? 15 : berthData===2 ? 55 :0
           return {fillText:{text:`${condition}`,x:(idx*interval)+shift,y:210},fillStyle:"#CCCCCC",font:'12px sans-serif'}
         })
-        const beathText = data.beathData.map((beathData,idx)=>{
-          const condition = beathData===1 ? 'open' : beathData===2 ? 'close' :""
+        const berthText = data.berthData.map((berthData,idx)=>{
+          const condition = berthData===1 ? 'open' : berthData===2 ? 'close' :""
           return {fillText:{text:`${condition}`,x:wk_x+2,y:clientHeight+155+(idx*30)},fillStyle:"lime"}
         })
         return {...data,
           path:{coordinate:[[wk_x,rateStart_y-30],[wk_x,rateStart_y+565]],strokeStyle:"lime"},
           text:[{fillText:{text:`${data.frame}`,x:wk_x+2,y:rateStart_y-20},fillStyle:"lime"},
-                {fillText:{text:`${(data.beathUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"yellow"},
+                {fillText:{text:`${(data.berthUseRete*100)|0}%`,x:wk_x+2,y:rateStart_y+112},fillStyle:"yellow"},
                 {fillText:{text:`${(data.doorOpenRete*100)|0}%`,x:wk_x+30,y:rateStart_y+112},fillStyle:"aqua"},
-                ...beathText, ...beathBoxText]
+                ...berthText, ...berthBoxText]
         }
       })
       const movesbase = [{operation}]
       this.props.actions.setMovesBase(movesbase)
     }
-    for(let i=0; i<beathCount; i=i+1){
+    for(let i=0; i<berthCount; i=i+1){
       context.strokeStyle = '#CCCCCC'
       const start_y = clientHeight+140+(i*30)
-      context.fillText(`beath no.${i+1}`,50,start_y)
+      context.fillText(`berth no.${i+1}`,50,start_y)
       context.strokeRect(start_x,start_y,graphwidth,24)
       context.strokeStyle = 'red'
-      if(this.state.beathDataArray !== null){
-        const currentdata = this.state.beathDataArray[i]
+      if(this.state.berthDataArray !== null){
+        const currentdata = this.state.berthDataArray[i]
         const dataLength = currentdata.length
         context.beginPath()
         for(let j=0; j<dataLength; j=j+1){
@@ -246,7 +246,7 @@ class App extends Container {
     const { actions, viewport, movedData, movesbase } = this.props;
     const PointCloudData = movedData.filter(x=>x.pointCloud);
     const PathData = movedData
-    const {beathUseRete,realtime,frame} = movedData.length>0 ? movedData[0] : {beathUseRete:0,realtime:0,frame:0}
+    const {berthUseRete,realtime,frame} = movedData.length>0 ? movedData[0] : {berthUseRete:0,realtime:0,frame:0}
     const { position } = this.state;
     const {paused=false,currentTime=0,duration=0} = this.videoRef.current ? this.videoRef.current.player :{}
     const {clientWidth=0,clientHeight=0} = this.videoRef.current ? this.videoRef.current.videoRef.current :{}
@@ -259,7 +259,7 @@ class App extends Container {
           videoplay={this.videoplay.bind(this)} videopause={this.videopause.bind(this)} videorestart={this.videorestart.bind(this)}/>
 
           <CanvasComponent className="videoannotationlayer" videoUrl={this.state.videoUrl}
-            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBeathData={this.state.truckBeathData}/>
+            width={clientWidth} height={900} updateCanvas={this.updateCanvas.bind(this)} truckBerthData={this.state.truckBerthData}/>
 
           <VideoAnnotationLayer ref={this.videoRef}
           videoUrl={this.state.videoUrl}
@@ -306,7 +306,7 @@ class App extends Container {
           pitch:{viewport.pitch}&nbsp;*/}
           videoWidth:{clientWidth}&nbsp;
           videoHeight:{clientHeight}&nbsp;
-          beathUseRete:{(beathUseRete*100)|0}%&nbsp;
+          berthUseRete:{(berthUseRete*100)|0}%&nbsp;
           realtime:{realtime|0}&nbsp;
           frame:{frame}&nbsp;
           videoDuration:{duration ? duration : 0}&nbsp;
@@ -337,10 +337,10 @@ const CanvasComponent = (props)=>{
     if(canvasRef.current !== undefined){
       if(props.videoUrl){
         const context = canvasRef.current.getContext('2d');
-        props.updateCanvas(context,props.width,props.height,props.truckBeathData);
+        props.updateCanvas(context,props.width,props.height,props.truckBerthData);
       }
     }
-  },[canvasRef,props.videoUrl,props.width,props.height,props.truckBeathData])
+  },[canvasRef,props.videoUrl,props.width,props.height,props.truckBerthData])
 
   const Result = React.useMemo(()=>
     <canvas ref={canvasRef} width={props.width} height={props.height} className={props.className}/>

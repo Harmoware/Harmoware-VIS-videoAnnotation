@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const TruckBeathInput = (props)=>{
+export const TruckBerthInput = (props)=>{
     const { actions, id, videoFps, realFrameInterval } = props;
 
     const onSelect = (e)=>{
@@ -10,7 +10,7 @@ export const TruckBeathInput = (props)=>{
             return;
         }
         actions.setLoading(true);
-        props.updateState({truckBeathData:null,beathDataArray:null})
+        props.updateState({truckBerthData:null,berthDataArray:null})
         actions.setMovesBase([]);
         reader.readAsText(file);
         const file_name = file.name;
@@ -31,37 +31,37 @@ export const TruckBeathInput = (props)=>{
             const lastData = [...filterData[filterData.length-1]]
             lastData[0] = filterData.length
             filterData.push(lastData)
-            let beathDataArray = new Array(dataLength-1);
-            const truckBeathData = filterData.map((data,idx)=>{
+            let berthDataArray = new Array(dataLength-1);
+            const truckBerthData = filterData.map((data,idx)=>{
                 const frame = parseInt(data[0])
-                let beathData = []
-                let beathUseCount = 0
+                let berthData = []
+                let berthUseCount = 0
                 let doorOpneCount = 0
                 for(let i=0; i<data.length; i=i+1){
                     if(i>0){
                         const setData = parseInt(data[i]) 
-                        beathData.push(setData)
+                        berthData.push(setData)
                         if(idx===0){
-                            beathDataArray[i-1] = []
+                            berthDataArray[i-1] = []
                         }
-                        beathDataArray[i-1].push(setData)
-                        beathUseCount = beathUseCount + (setData>0 ? 1 : 0)
+                        berthDataArray[i-1].push(setData)
+                        berthUseCount = berthUseCount + (setData>0 ? 1 : 0)
                         doorOpneCount = doorOpneCount + (setData===1 ? 1 : 0)
                     }
                 }
-                beathData.reverse()
+                berthData.reverse()
                 return {
                     frame:frame,
                     elapsedtime:(frame/videoFps),
                     realtime:(frame*realFrameInterval),
-                    beathData:beathData,
-                    beathUseRete:(beathUseCount/(data.length-1)),
+                    berthData:berthData,
+                    berthUseRete:(berthUseCount/(data.length-1)),
                     doorOpenRete:(doorOpneCount/(data.length-1))
                 }
             })
-            beathDataArray.reverse()
-            actions.setInputFilename({ truckBeathFileName: file_name });
-            props.updateState({truckBeathData,beathDataArray})
+            berthDataArray.reverse()
+            actions.setInputFilename({ truckBerthFileName: file_name });
+            props.updateState({truckBerthData,berthDataArray})
             //actions.setMovesBase(readdata);
             actions.setAnimatePause(true);
             //actions.setTimeBegin(0)
@@ -71,8 +71,8 @@ export const TruckBeathInput = (props)=>{
     };
 
     const onClick = (e)=>{
-        actions.setInputFilename({ truckBeathFileName: null });
-        props.updateState({truckBeathData:null,beathDataArray:null})
+        actions.setInputFilename({ truckBerthFileName: null });
+        props.updateState({truckBerthData:null,berthDataArray:null})
         actions.setMovesBase([]);
         e.target.value = '';
     };
